@@ -4,7 +4,7 @@ Current project undertakes asessment of two-dimensional Ising Model. The model r
 
 In this project I examine the Metropolis Algorithm, which belongs to a family of Monte Carlo simuation. 
 
-To eliminate the slowing down around the critical temperature and to speed up the general execution time - a Swendsen-Wang cluster algorithm is introduced.
+To eliminate the slowing down around the critical temperature and to speed up the general execution time a Swendsen-Wang cluster algorithm is introduced.
 
 
 ## Structure
