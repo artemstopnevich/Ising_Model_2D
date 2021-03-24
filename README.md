@@ -2,7 +2,7 @@
 
 Current project undertakes asessment of two-dimensional Ising Model. The model represents a many-body system and can be solved with various approaches. The evolution of the model is dictated by the flip of its spins. There are various methods to simulate the problem. 
 
-In this project I examine the Metropolis Algorithm, which belongs to a family of Monte Carlo simuation. 
+In this project I examine the Metropolis Algorithm, which belongs to a family of Monte Carlo simuations. 
 
 To eliminate the slowing down around the critical temperature and to speed up the general execution time a Swendsen-Wang cluster algorithm is introduced.
 
