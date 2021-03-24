@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 from scipy.ndimage.interpolation import shift
 
 '''
-    series of functions which will extract all major order parameters from the 
-    Ising simulation
+    Series of functions which will extract all major order parameters
+    from the Ising simulation
 '''
 
 def magnetization(lattice):
@@ -33,7 +33,8 @@ def energy(lattice, J=1):
             neighbours += np.roll(NN, shift=j, axis = i);
             E+=J*np.sum(lattice*np.roll(NN, shift=j, axis = i));
     DeltaE = J * (lattice* neighbours)/(np.prod(N));
-    return  -np.sum(DeltaE)/2;#-(E/np.prod(N))/2; #return is avg energy per site
+    return  -np.sum(DeltaE)/2;
+#    return -(E/np.prod(N))/2; #return is avg energy per site
 
 def magnetization_2(lattice): 
     ''' calculate m^2 '''

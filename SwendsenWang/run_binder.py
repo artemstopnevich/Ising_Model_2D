@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 from SwendsenWang.SW_update import *
 
 
-# initialise 2D grid
+# specify dimensions to generate 2D grids
+# Note to have fairly small difference between lattice sizes for better results
 L = [10,15,20,25]
 nT = 30; J = 1
 

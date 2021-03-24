@@ -11,12 +11,13 @@ from copy import copy
 
 def getNN(site_indices, site_ranges, num_NN):
     '''
-        site_indices: [i,j], root site to get NN of
-        site_ranges: [Nx,Ny], boundaries of the grid
-        num_NN: number of nearest neighbors, usually 1 (in each dir)
-        
         function which gets NN on any d dimensional cubic grid
         with a periodic boundary condition
+        
+        :param site_indices: [i,j], root site to get NN of
+        :param site_ranges: [Nx,Ny], boundaries of the grid
+        :param num_NN: number of nearest neighbors, usually 1 (in each dir)
+        :return: nearest neigbours of site
     '''
 
     Nearest_Neighbors = list();

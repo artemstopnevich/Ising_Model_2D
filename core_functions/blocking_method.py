@@ -11,7 +11,13 @@ import numpy as np
 
 
 def blocking_error(A, num_blocks):
-    ''' Input Formula '''
+    '''
+        perform error calculation by spliting up
+        data in a series of blocks
+        :param A: variable (array of all mcStep points)
+        :param num_blocks: number of blocks to split into
+        :return: total error for the variable @temp point
+    '''
     mean_values = np.zeros(num_blocks)
     error_block = np.zeros(num_blocks)
     itemize = range(1, num_blocks+1)

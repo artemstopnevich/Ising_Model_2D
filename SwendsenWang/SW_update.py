@@ -17,19 +17,33 @@ from core_functions.nearest_neighbours import *
 from core_functions.blocking_method import *
 
 
-
-
 def add_NN(Lattice, bonded, cluster, K, N, s_i):
     '''
     check and add nearest neighbors to a cluster
-    :param Lattice:
-    :param bonded: visited or not?
-    :param clusters: list of elements belonging to cluster
-    :param K: coupling constant strength (beta*J)
-    :param N: size of lattice
-    :param s_i: current site or root site
-    :return:
+    
+    Parameters
+    ----------
+    Lattice : Randomly configured lattice of spins [-1,1].
+    
+    bonded: dummy array of ones
+    
+    clusters: empty dictionary, which will store all the clusters
+
+    K : J*beta
+    
+    N : dimensions of the lattice (tuple).
+    
+    s_i: current site or root site
+    
+    Returns
+    -------
+    new_cluster_sites: newly identified sites, which belong to the
+                        cluster of root site
+
+    bonded: 1 or 0, indicates whether a site has been assigned to 
+             a cluster or not
     '''
+
     new_cluster_sites = []
     p = 1-np.exp(-2*K)
     num_NN = 1
@@ -51,11 +65,28 @@ def add_NN(Lattice, bonded, cluster, K, N, s_i):
 def generate_cluster(Lattice, visited, K, root, search_cutoff = 500):
     '''
     this is the graph search like function
-    :param root: coordinate to generate cluster from
-    :param Lattice: ising grid
-    :param K: J*beta
-    :return: coordinates of a single new cluster in as a list of tuples
+    
+    Parameters
+    ----------
+    Lattice : Randomly configured lattice of spins [-1,1].
+    
+    visited : array that tells, which sites have/ haven't already 
+            been visited 
+    K : J*beta
+    
+    root : coordinate to generate cluster from
+    
+    search_cutoff : stops searching for new cluster members.
+                    The default is 500.
+                    
+    Returns
+    -------
+    cluster: identified cluster with coordiantes of sites as tuples
+
+    bonded: 1 or 0, indicates whether a site has been assigned to 
+                a cluster or not
     '''
+
     N = tuple(Lattice.shape);
     bonded = np.ones(N)
     #start = (0, 0)
@@ -76,12 +107,37 @@ def generate_cluster(Lattice, visited, K, root, search_cutoff = 500):
         return [], bonded;
 
 
-## open question, how do we search the grid to search for viable clusters?
+## one to answer: how do we search the lattice to search for viable clusters? :)
 def run_cluster_sim(Lattice, epochs, N, J, beta, 
                     disp_cutoff = 100, visual = False, error=True):
-    ''' run cluster epoch simulations '''
+    '''
+    Parameters
+    ----------
+    Lattice : randomly configurated lattice of spins/ 
+              last config from previous temp. point.
+    epochs : number of sweeps through cluster search.
+    
+    N : dimensions of the lattice (tuple).
+    
+    J : coupling coefficient (usually set to 1).
+    
+    beta : 1/Temperature
+    
+    disp_cutoff : divider of epoch sims. The default is 100.
+    
+    visual : Bool, visualise epoch sims. The default is False.
+    
+    error : Bool, choosing to calculate error for observables.
+            The default is True.
+
+    Returns
+    -------
+    data: physical observables
+        
+    errors: errors of physical observables
+    '''
+
     relax_time =100;
-#    Lattice = 2 * np.random.randint(0, 2, N) - 1; #put random lattice at the beginning
     bond_history = np.zeros(N);
     M = E = M2 = E2 = 0
     data = list();
@@ -97,7 +153,7 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
         bond_history += bonded;
         Lattice = Lattice*bonded;
         if(t > relax_time):
-            M = abs(magnetization(Lattice));
+            M = magnetization(Lattice);
             E = energy(Lattice);
             M2 = M*M;
             E2 = E*E;
@@ -120,7 +176,6 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
     data = np.array(data);
     
     if error == True:
-
         error_E = blocking_error(data[:,0], 10);
         error_M = blocking_error(data[:,0], 10);
         errors = np.array([error_E, error_M]);
@@ -133,6 +188,29 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
     return data, errors
 
 def run_clusters(Lattice, epochs, N, J, T, nT):
+    '''
+    
+    Parameters
+    ----------
+    Lattice : Randomly configured lattice of spins [-1,1].
+    
+    epochs : number of sweeps through cluster search.
+    
+    N : dimensions of the lattice (tuple).
+    
+    J : coupling coefficient (usually set to 1).
+    
+    T : temperature range 
+    
+    nT : number of temperature points
+
+    Returns
+    -------
+    df1 : DataFrame of physical observables
+    
+    df2 : DataFrame of errors of observables
+
+    '''
     data = np.zeros((7,nT));
     errors = np.zeros((2,nT));
     for tt in range(nT):
@@ -147,6 +225,27 @@ def run_clusters(Lattice, epochs, N, J, T, nT):
     return df1, df2
 
 def run_binder(Lattice, epochs, Ls, J, T, nT):
+    '''
+    
+    Parameters
+    ----------
+    Lattice : Randomly configured lattice of spins [-1,1].
+    
+    epochs : number of sweeps through cluster search.
+    
+    Ls : list of lattice sizes (lengths)
+    
+    J : coupling coefficient (usually set to 1).
+    
+    T : temperature range 
+    
+    nT : number of temperature points
+
+    Returns
+    -------
+    Plotting the Binder Ratios to determine the critical temperature
+
+    '''
     for L in Ls:
         N = (L,L);
         data, _ = run_clusters(epochs, N, J, T, nT);
