@@ -6,9 +6,9 @@ Created on Tue Mar 23 14:14:50 2021
 @author: artemstopnevich
 """
 
-
 '''
     Master file
+    -----------
     Choose, which option to run below
 '''
 
@@ -23,7 +23,6 @@ Cluster = True
 ClusterObservables = True
 ClusterSim = False
 ClusterBinder = False
-
 
 
 if Cluster == True:
