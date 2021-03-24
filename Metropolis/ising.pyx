@@ -108,7 +108,7 @@ cpdef ising_step(np.int64_t[:, :] Field, float beta, int N):
         elif rand() < exp(-dE*beta):
             Field[a,b] *= -1
     return 0
-#    return np.array(Field) 
+
         
 @cython.wraparound(False)
 @cython.boundscheck(False)
