@@ -9,4 +9,4 @@ To eliminate the slowing down around the critical temperature and to speed up th
 
 ## Structure
 
-Use _run.py_ to initiate different simulations. Edit simulation-specific settings in the _run __simulation__.py_ scripts. Metropolis algorithm is set up with cython, therefore one needs to make sure that all appropriate packages are installed before proceeding. A _setup.py_ file is used to compile a file of the type '.pyx'. Instructions on how to perform compilation are inside the file.
+Use _run.py_ to initiate different simulations. Edit simulation-specific settings in the _run _ __simulation__.py_ scripts. Metropolis algorithm is set up with cython, therefore one needs to make sure that all appropriate packages are installed before proceeding. A _setup.py_ file is used to compile a file of the type '.pyx'. Instructions on how to perform compilation are inside the file.
