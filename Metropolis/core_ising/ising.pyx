@@ -12,7 +12,9 @@ cimport cython
 import cython
 import numpy as np
 cimport numpy as np
+from copy import copy
 import matplotlib.pyplot as plt
+from core_functions.physical_measures import *
 from libc.math cimport sqrt, exp #raw c funcs
 cdef extern from "limits.h":
     int RAND_MAX # specifiying max random number 
@@ -26,50 +28,51 @@ cdef extern from "limits.h":
 @cython.cdivision(True)
 @cython.nonecheck(False)
 cdef class Ising:
-    cdef int N, eqSteps, mcSteps, nt
-    def __init__(self, N, nt, eqSteps, mcSteps):
+    cdef int N, epochs, nt
+    def __init__(self, N, nt, epochs):
         self.N      = N 
         self.nt     = nt
-        self.eqSteps = eqSteps
-        self.mcSteps = mcSteps
+        self.epochs = epochs
         pass    
 
-
-    cpdef twoD(self, np.int64_t[:, :] Field, double [:] E, double [:] M, double [:] C, double [:] X, double [:] B, double [:] Error_E, double [:] Error_M):
-        cdef int eqSteps = self.eqSteps, mcSteps = self.mcSteps, N = self.N, nt = self.nt
-        cdef double E1, M1, E2, M2, beta,  Ene, Mag
-        cdef int i, tt, N2 = N*N
-        cdef double iMCS = 1.0/mcSteps, iNs = 1.0/N2
+    cpdef twoD(self, np.int64_t[:, :] Field, double [:] E, double [:] M, double [:] C, double [:] X, double [:] B, double [:] Q, double [:] Error_E, double [:] Error_M):
+        cdef int epochs = self.epochs, N = self.N, nt = self.nt;
+        cdef double E1, M1, E2, M2, beta, Ene, Mag;
+        cdef int i, j, tt, N2 = N*N;
+#        cdef float [:,:] data ;
+        cdef int relax_time = 300;
+        cdef double iMCS = 1.0/epochs, iNs = 1.0/N2;
+        initialise(Field, N);
         for tt in range(nt):
-            print(tt, nt)
-            ene_array = mag_array = np.zeros((mcSteps), dtype=np.float64)
-            E1 = E2 = M1 = M2= 0
-            Mag = 0
-            beta = B[tt]
-            initialise(Field, N)
+            print(tt, nt);
+#            ene_array = mag_array = np.zeros((epochs-relax_time), dtype=np.float64);
+            E1 = E2 = M1 = M2= 0;
+            Mag = 0;
+            beta = B[tt];
+            data = np.zeros((epochs-relax_time,4))
+            for i in range(epochs):
+                ising_step(Field, beta, N);
+                if i > relax_time:
+                    j = i-relax_time;
+                    
+                    M1 = calcMag(Field, N)/(N*N)
+                    E1 = calcEnergy(Field, N);
+                    M2 = M1*M1;
+                    E2 = E1*E1;
+                    
+                    data[j,:] = [M1, E1, M2, E2];
+            Error_E[tt] = blocking_error(data[:,1], 10);
+            Error_M[tt] = blocking_error(data[:,0], 10);
             
-            for i in range(eqSteps):
-                ising_step(Field, beta, N)
+            data = np.mean(data, axis=0);
             
-            for i in range(mcSteps):
-                ising_step(Field, beta, N)
-                
-                Ene = calcEnergy(Field, N)
-                Mag = calcMag(Field,N)
-                E1 = E1 + Ene
-                ene_array[i] = Ene
-                M1 = M1 + Mag
-                mag_array[i] = Mag
-                E2 = E2 + Ene*Ene
-                M2 = M2 + Mag*Mag
-                
-            E[tt] = E1*iMCS*iNs 
-            M[tt] = M1*iMCS*iNs 
-            C[tt] = (E2*iMCS - E1*E1*iMCS*iMCS)*beta*beta*iNs;
-            X[tt] = (M2*iMCS - M1*M1*iMCS*iMCS)*beta*iNs;
-    #        Q[tt] = ((M2*iMCS)/(abs(M1)*abs(M1)*iMCS*iMCS));
-            Error_E[tt] = blocking_error(ene_array, 10)
-            Error_M[tt] = blocking_error(mag_array, 10)
+            M[tt] = data[0];      
+            E[tt] = data[1];
+            C[tt] = (data[3] - data[1]**2)*beta**2;
+            X[tt] = (data[2] - data[0]**2)*beta;
+            
+            Q[tt] = data[2]/(data[0]**2);
+
         return 
 
 ##############################################################################
@@ -114,26 +117,26 @@ cpdef ising_step(np.int64_t[:, :] Field, float beta, int N):
 @cython.boundscheck(False)
 @cython.cdivision(True)
 @cython.nonecheck(False)
-cdef int calcEnergy(np.int64_t[:, :] Field, int N):
+cdef float calcEnergy(np.int64_t[:, :] Field, int N):
     ''' Energy calculation'''
     cdef int i, j, energy = 0
     for i in range(1, N+1):
         for j in range(1, N+1):
             Field[0, j] = Field[N, j];  Field[i, 0] = Field[i, N];
             energy += -Field[i, j] * (Field[i-1, j] + Field[i, j-1]) 
-    return energy
+    return energy/(N*N)
 
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
 @cython.nonecheck(False)
-cdef int calcMag(np.int64_t[:,:] Field, int N):
+cdef float calcMag(np.int64_t[:,:] Field, int N):
     '''Magnetization of a given configuration'''
     cdef int i, j, mag = 0
     for i in range(1,N+1):
         for j in range(1,N+1):
             mag += Field[i,j]
-    return mag   
+    return mag
 
 @cython.wraparound(False)
 @cython.boundscheck(False)

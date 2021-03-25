@@ -176,7 +176,7 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
     data = np.array(data);
     
     if error == True:
-        error_E = blocking_error(data[:,0], 10);
+        error_E = blocking_error(data[:,1], 10);
         error_M = blocking_error(data[:,0], 10);
         errors = np.array([error_E, error_M]);
     else:

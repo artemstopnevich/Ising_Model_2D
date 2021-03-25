@@ -54,7 +54,7 @@ else:
     
 ext_modules=[
     Extension("ising",
-              sources=['ising.pyx'],
+              sources=['core_ising/ising.pyx'],
               include_dirs=[numpy.get_include()],
               extra_compile_args=ompArgs,
               extra_link_args=ompArgs)

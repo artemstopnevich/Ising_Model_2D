@@ -13,14 +13,15 @@ Created on Tue Mar 23 14:14:50 2021
 '''
 
 # Metropolis Algo - enable with (Metropolis = True) and choose the mode
-Metropolis = False
+Metropolis = True
 # Modes:
+MetropolisObservables = True
 MetropolisBinder = False
 
 # Swendsen-Wang Cluster Algo
-Cluster = True
+Cluster = False
 # Modes:
-ClusterObservables = True
+ClusterObservables = False
 ClusterSim = False
 ClusterBinder = False
 
@@ -41,6 +42,7 @@ if Metropolis == True:
     print("2D Ising Model: Metropolis Algorithm")
     if MetropolisObservables == True:
         print("mode: Physical Observables")
-        import Metropolis.twoDimensional
+        import Metropolis.run_metropolis
     if MetropolisBinder == True:
         print("mode: Binder Ratios")
+        import Metropolis.run_binder_metropolis

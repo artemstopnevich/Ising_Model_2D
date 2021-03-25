@@ -68,9 +68,9 @@ def binder(M, M2):
     return Q
 
 
-def observables_fig(Temperature, data, errors, L, nsteps):
+def observables_fig(Temperature, data, errors, L, epochs):
     f = plt.figure(figsize=(18, 10), dpi=80, linewidth=3, facecolor='w', edgecolor='k');    
-    f.suptitle("Observables of {}x{} lattice with {} iterations".format(L,L,nsteps), fontsize=20);
+    f.suptitle("Observables of {}x{} lattice with {} iterations".format(L,L,epochs), fontsize=20);
     sp =  f.add_subplot(2, 2, 1 );
     plt.plot(Temperature, data.ene, 'o', color="#A60628", label=' Energy');
     plt.errorbar(Temperature, data.ene, fmt='none', xerr=0, yerr= errors.ene);
@@ -99,6 +99,39 @@ def observables_fig(Temperature, data, errors, L, nsteps):
     plt.xlabel("Temperature (T)", fontsize=20);
     plt.ylabel("Suseptibility", fontsize=20);
     
-    plt.savefig("figures/observables_{}_grid_{}_steps.png".format(L, nsteps))
+    plt.savefig("figures/observables_{}_grid_{}_steps.png".format(L, epochs))
     plt.show()
     
+def observables_fig_Metropolis(T, E, M, C, X, EE, EM):
+    f = plt.figure(figsize=(18, 10), dpi=80, linewidth=3, facecolor='w', edgecolor='k');    
+
+    sp =  f.add_subplot(2, 2, 1 );
+    plt.plot(T, E, 'o', color="#A60628", label=' Energy');
+    plt.errorbar(T, E, fmt='none', xerr=0, yerr= EE);
+    plt.xlabel("Temperature (T)", fontsize=20);
+    plt.ylabel("Energy ", fontsize=20);
+    
+    sp =  f.add_subplot(2, 2, 2 );
+    plt.plot(T, abs(M), '*', color="#348ABD", label='Magnetization');
+    plt.errorbar(T, abs(M), fmt='none', xerr=0, yerr= EM)
+    plt.xlabel("Temperature (T)", fontsize=20);
+    plt.ylabel("Magnetization ", fontsize=20);
+
+
+    sp =  f.add_subplot(2, 2, 3 );
+    plt.plot(T, C, 'd', color='black', label='Specific Heat');
+    plt.xlabel("Temperature (T)", fontsize=20);
+    plt.ylabel("Specific Heat ", fontsize=20);
+    
+    
+    sp =  f.add_subplot(2, 2, 4 );
+    plt.plot(T, X, 's', label='Specific Heat');
+    plt.legend(loc='best', fontsize=15); 
+    plt.xlabel("Temperature (T)", fontsize=20);
+    plt.ylabel("Suseptibility", fontsize=20);
+    
+    
+    plt.show()
+    
+# import math 
+# M_T[t] = pow(1- pow(np.sinh(2*iT), -4), 1/8)
