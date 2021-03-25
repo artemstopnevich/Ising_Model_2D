@@ -20,7 +20,8 @@ nT = 30; J = 1
 epochs = 2000;
 nearest_neighbors = 1;
 
-Temperature = np.linspace(2.1, 2.4, nT)
 
-data = run_binder(epochs, L, J, Temperature, nT)
+Temperature = np.linspace(2, 3, nT);
+
+run_binder(epochs, L, J, Temperature, nT)
 

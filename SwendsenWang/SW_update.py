@@ -9,6 +9,7 @@ Created on Tue Mar 23 10:57:22 2021
 
 import numpy as np
 import pandas as pd
+import math
 from numpy import transpose as tr
 from copy import copy
 import matplotlib.pyplot as plt
@@ -109,7 +110,7 @@ def generate_cluster(Lattice, visited, K, root, search_cutoff = 500):
 
 ## one to answer: how do we search the lattice to search for viable clusters? :)
 def run_cluster_sim(Lattice, epochs, N, J, beta, 
-                    disp_cutoff = 100, visual = False, error=True):
+                    disp_cutoff = 100, visual = False):
     '''
     Parameters
     ----------
@@ -175,16 +176,19 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
             plt.show();
     data = np.array(data);
     
-    if error == True:
-        error_E = blocking_error(data[:,1], 10);
-        error_M = blocking_error(data[:,0], 10);
-        errors = np.array([error_E, error_M]);
-    else:
-        errors = []
+
+    error_E = blocking_error(data[:,1], 10);
+    error_M = blocking_error(data[:,0], 10);
+
+
     data = np.mean(data, axis = 0);
-    data = np.append(data, [susceptibility(data[0], data[2], beta)], axis=0);
-    data = np.append(data, [heat_capacity(data[1], data[3], beta)], axis=0);
+    data = np.append(data, [(data[2] - data[0]**2)*beta], axis=0);
+    data = np.append(data, [(data[3] - data[1]**2)*beta**2], axis=0);
     data = np.append(data, [binder(data[0], data[2])], axis=0);
+    
+    error_Q = (data[2]/data[0])*np.sqrt(((2*data[0]*error_M)/data[2])**2 + (error_M/data[0])**2)
+    
+    errors = np.array([error_E, error_M, error_Q]);
     return data, errors
 
 def run_clusters(Lattice, epochs, N, J, T, nT):
@@ -212,19 +216,19 @@ def run_clusters(Lattice, epochs, N, J, T, nT):
 
     '''
     data = np.zeros((7,nT));
-    errors = np.zeros((2,nT));
+    errors = np.zeros((3,nT));
     for tt in range(nT):
         print(tt,nT);
         beta = 1/T[tt];
         K = J*beta;
-        idata, ierrors = run_cluster_sim(Lattice, epochs, N, J, beta,  disp_cutoff=100, error=True);
+        idata, ierrors = run_cluster_sim(Lattice, epochs, N, J, beta,  disp_cutoff=100);
         data[:,tt] = idata;
         errors[:,tt] = ierrors;
     df1 = pd.DataFrame(tr(data), columns = ["mag", "ene", "mag^2", "ene^2", "susc", "sp_heat", "binder"])
-    df2 = pd.DataFrame(tr(errors), columns = ["mag", "ene"])
+    df2 = pd.DataFrame(tr(errors), columns = ["mag", "ene", "binder"])
     return df1, df2
 
-def run_binder(Lattice, epochs, Ls, J, T, nT):
+def run_binder(epochs, Ls, J, T, nT):
     '''
     
     Parameters
@@ -248,10 +252,14 @@ def run_binder(Lattice, epochs, Ls, J, T, nT):
     '''
     for L in Ls:
         N = (L,L);
-        data, _ = run_clusters(epochs, N, J, T, nT);
+        Lattice = 2 * np.random.randint(0, 2, N) - 1;
+        data, errors = run_clusters(Lattice, epochs, N, J, T, nT);
         plt.plot(T, data.binder, label='N=%s'%L);
+
+        plt.errorbar(T, data.binder, fmt='none', xerr=0, yerr= errors.binder);
         plt.legend(loc='best', fontsize=15); 
         plt.xlabel("Temperature (T)", fontsize=20);
         plt.ylabel("Binder Ratio (Q)", fontsize=20);
+    plt.axvline(x=2/math.log(1 + math.sqrt(2)), linestyle='--', color='r')
     plt.savefig("figures/Binder_{}".format(Ls));
     plt.show()

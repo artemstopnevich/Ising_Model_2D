@@ -13,17 +13,17 @@ Created on Tue Mar 23 14:14:50 2021
 '''
 
 # Metropolis Algo - enable with (Metropolis = True) and choose the mode
-Metropolis = True
+Metropolis = False
 # Modes:
-MetropolisObservables = True
+MetropolisObservables = False
 MetropolisBinder = False
 
 # Swendsen-Wang Cluster Algo
-Cluster = False
+Cluster = True
 # Modes:
 ClusterObservables = False
 ClusterSim = False
-ClusterBinder = False
+ClusterBinder = True
 
 
 if Cluster == True:
