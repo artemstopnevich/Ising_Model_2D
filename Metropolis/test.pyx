@@ -16,10 +16,10 @@ import cython
 from libc.math cimport sqrt, exp #raw c funcs
 cdef extern from "limits.h":
     int RAND_MAX # specifiying max random number 
-cdef extern from "mt19937ar.h":
-    double genrand_real2()
-    double init_genrand(unsigned long)
+cdef extern from "stdlib.h":
+    double drand48()
+    void srand48(long int seedval)
 
-
-print(genrand_real2())
+srand48(2)
+print(drand48())
 

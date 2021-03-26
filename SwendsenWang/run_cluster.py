@@ -13,8 +13,6 @@ from SwendsenWang.SW_update import *
 from core_functions.physical_measures import observables_fig
 
 
-
-
 # initialise 2D grid
 L = 32;
 N = (L,L);

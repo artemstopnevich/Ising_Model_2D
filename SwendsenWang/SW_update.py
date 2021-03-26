@@ -138,7 +138,7 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
     errors: errors of physical observables
     '''
 
-    relax_time =100;
+    relax_time =300;
     bond_history = np.zeros(N);
     M = E = M2 = E2 = 0
     data = list();
@@ -182,9 +182,9 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
 
 
     data = np.mean(data, axis = 0);
-    data = np.append(data, [(data[2] - data[0]**2)*beta], axis=0);
-    data = np.append(data, [(data[3] - data[1]**2)*beta**2], axis=0);
-    data = np.append(data, [binder(data[0], data[2])], axis=0);
+    data = np.append(data, [susceptibility(data[0], data[2], beta)]);
+    data = np.append(data, [heat_capacity(data[1], data[3], beta)]);
+    data = np.append(data, [binder(data[0], data[2])]);
     
     error_Q = (data[2]/data[0])*np.sqrt(((2*data[0]*error_M)/data[2])**2 + (error_M/data[0])**2)
     

@@ -13,15 +13,15 @@ from SwendsenWang.SW_update import *
 
 # specify dimensions to generate 2D grids
 # Note to have fairly small difference between lattice sizes for better results
-L = [10,15,20,25]
-nT = 30; J = 1
+L = [8,16,32]
+nT = 2; J = 1
 
 #simulation parameters
-epochs = 2000;
+epochs = 10000;
 nearest_neighbors = 1;
 
 
-Temperature = np.linspace(2, 3, nT);
+Temperature = np.linspace(2.2, 2.3, nT);
 
 run_binder(epochs, L, J, Temperature, nT)
 
