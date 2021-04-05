@@ -8,7 +8,8 @@ Created on Thu Mar 25 13:16:57 2021
 
 from __future__ import division
 import numpy as np
-import amtplotlib.pyplot as plt
+import math
+import matplotlib.pyplot as plt
 import pyximport
 pyximport.install()
 import Metropolis.ising as ising
@@ -22,7 +23,7 @@ for i in [5,10,15]:
     N, nT       = i, 10
     epochs = 2000
 
-    Field           = np.zeros((N+2,N+2), dtype=np.int64)
+    Field           = np.zeros((N+2,N+2), dtype=np.int32)
     Energy          = np.zeros((nT), dtype=np.float64)
     Magnetization   = np.zeros((nT), dtype=np.float64)
     SpecificHeat    = np.zeros((nT), dtype=np.float64)

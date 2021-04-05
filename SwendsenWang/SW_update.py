@@ -139,8 +139,10 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
     '''
 
     relax_time =300;
+    Ns = np.prod(N)
     bond_history = np.zeros(N);
     M = E = M2 = E2 = 0
+    global data
     data = list();
     K = J*beta;
     for t in range(epochs):
@@ -151,11 +153,12 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
         root = tuple(root);
         visited = np.zeros(N);
         cluster, bonded = generate_cluster(Lattice, visited, K, root)
-        bond_history += bonded;
+        bond_history += bonded; #needed?
         Lattice = Lattice*bonded;
+
         if(t > relax_time):
-            M = magnetization(Lattice);
-            E = energy(Lattice);
+            M = calcMag(Lattice)/Ns;
+            E = calcEnergy(Lattice)/Ns;
             M2 = M*M;
             E2 = E*E;
             data.append([M, E, M2, E2]);
@@ -174,22 +177,23 @@ def run_cluster_sim(Lattice, epochs, N, J, beta,
             plt.draw();
             plt.title("Bonds");
             plt.show();
+            
     data = np.array(data);
-    
-
-    error_E = blocking_error(data[:,1], 10);
-    error_M = blocking_error(data[:,0], 10);
-
-
+#    error_E = blocking_error(data[:,1], 10);
+#    error_M = blocking_error(data[:,0], 10);
     data = np.mean(data, axis = 0);
+#    print(data)
+#    data = np.append(data, [(data[2] - data[0]**2)*beta]);
     data = np.append(data, [susceptibility(data[0], data[2], beta)]);
-    data = np.append(data, [heat_capacity(data[1], data[3], beta)]);
+#    data = np.append(data, [(data[3] - data[1]**2)*beta**2]);
+    data = np.append(data, [specific_heat(data[1], data[3], beta)]);
     data = np.append(data, [binder(data[0], data[2])]);
+#    error_Q = (data[2]/data[0])*np.sqrt(((2*data[0]*error_M)/data[2])**2 + (error_M/data[0])**2)
     
-    error_Q = (data[2]/data[0])*np.sqrt(((2*data[0]*error_M)/data[2])**2 + (error_M/data[0])**2)
-    
-    errors = np.array([error_E, error_M, error_Q]);
-    return data, errors
+#    errors = np.array([error_E, error_M, error_Q]);
+    return data
+
+#, errors
 
 def run_clusters(Lattice, epochs, N, J, T, nT):
     '''
@@ -210,23 +214,27 @@ def run_clusters(Lattice, epochs, N, J, T, nT):
 
     Returns
     -------
-    df1 : DataFrame of physical observables
+    df_data : DataFrame of physical observables
     
-    df2 : DataFrame of errors of observables
+    df_error : DataFrame of errors of observables
 
     '''
+    initialise(Lattice, N[0])
     data = np.zeros((7,nT));
     errors = np.zeros((3,nT));
     for tt in range(nT):
         print(tt,nT);
         beta = 1/T[tt];
-        K = J*beta;
-        idata, ierrors = run_cluster_sim(Lattice, epochs, N, J, beta,  disp_cutoff=100);
+        idata = run_cluster_sim(Lattice, epochs, N, J, beta,  disp_cutoff=100);
+
+# ierrors
         data[:,tt] = idata;
-        errors[:,tt] = ierrors;
-    df1 = pd.DataFrame(tr(data), columns = ["mag", "ene", "mag^2", "ene^2", "susc", "sp_heat", "binder"])
-    df2 = pd.DataFrame(tr(errors), columns = ["mag", "ene", "binder"])
-    return df1, df2
+#        errors[:,tt] = ierrors;
+    df_data = pd.DataFrame(tr(data), columns = ["mag", "ene", "mag^2", "ene^2", "susc", "sp_heat", "binder"])
+#    df_error = pd.DataFrame(tr(errors), columns = ["mag", "ene", "binder"])
+    return df_data
+
+#, df_error
 
 def run_binder(epochs, Ls, J, T, nT):
     '''
@@ -263,3 +271,14 @@ def run_binder(epochs, Ls, J, T, nT):
     plt.axvline(x=2/math.log(1 + math.sqrt(2)), linestyle='--', color='r')
     plt.savefig("figures/Binder_{}".format(Ls));
     plt.show()
+    
+    
+def initialise(Field, N):    # generates a random spin Spin configuration
+    '''generates a random spin configuration for initial condition'''
+    for i in range(N):
+        for j in range(N):
+            if(np.random.rand() < 0.5): 
+                Field[i, j]=-1
+            else:
+                Field[i, j]=1
+#    return 0

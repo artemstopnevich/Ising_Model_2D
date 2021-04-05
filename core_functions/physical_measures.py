@@ -18,10 +18,11 @@ from scipy.ndimage.interpolation import shift
 
 def magnetization(lattice):
     ''' calculate m'''
-    Ns = np.prod(lattice.shape)
-    return abs((1/Ns) * np.sum(lattice));
+    N = np.prod(lattice.shape)
+    return np.sum(lattice);
 
-def energy(lattice, J=1):
+
+def energy(lattice):
     ''' calculate e '''
     N = lattice.shape;
     dimension = len(N); #trying to go dimensionless
@@ -31,8 +32,8 @@ def energy(lattice, J=1):
     for i in range(dimension):
         for j in [-1,1]:
             neighbours += np.roll(NN, shift=j, axis = i);
-            E+=J*np.sum(lattice*np.roll(NN, shift=j, axis = i));
-    DeltaE = J * (lattice* neighbours)/(np.prod(N));
+            E += np.sum(lattice*np.roll(NN, shift=j, axis = i));
+    DeltaE = (lattice*neighbours);
     return  -np.sum(DeltaE)/2;
 #    return -(E/np.prod(N))/2; #return is avg energy per site
 
@@ -55,10 +56,10 @@ def energy_2(lattice,J=1):
 
 def susceptibility(M, M2, beta):
     ''' formula chi = 1/T(<m^2> - <m>^2) '''
-    chi = beta*(M2 - M*M);
+    chi = beta*(M2 - abs(M)*abs(M));
     return chi;
 
-def heat_capacity(E, E2, beta):
+def specific_heat(E, E2, beta):
     ''' formula cv = (<e^2> - <e>^2)*(J/T)^2 '''
     cv = (E2 - E*E)*(beta**2);
     return cv;
@@ -68,19 +69,39 @@ def binder(M, M2):
     return Q
 
 
-def observables_fig(Temperature, data, errors, L, epochs):
+def calcEnergy(Field):
+    ''' Energy of a given configuration '''
+    N = Field.shape[0];
+    Ns = np.prod(Field.shape);
+    energy = 0;
+    for i in range(N):
+        for j in range(N):
+            Field[0, j] = Field[N-1, j];  Field[i, 0] = Field[i, N-1];
+            energy += -Field[i, j] * (Field[i-1, j] + Field[i, j-1]);
+    return energy/2
+    
+def calcMag(Field):
+    ''' Magnetization of a given configuration '''
+    N = Field.shape[0];
+    mag = 0;
+    for i in range(N):
+        for j in range(N):
+            mag += Field[i,j];
+    return mag
+
+def observables_fig(Temperature, data, L, epochs):
     f = plt.figure(figsize=(18, 10), dpi=80, linewidth=3, facecolor='w', edgecolor='k');    
     f.suptitle("Observables of {}x{} lattice with {} iterations".format(L,L,epochs), fontsize=20);
     sp =  f.add_subplot(2, 2, 1 );
     plt.plot(Temperature, data.ene, 'o', color="#A60628", label=' Energy');
-    plt.errorbar(Temperature, data.ene, fmt='none', xerr=0, yerr= errors.ene);
+#    plt.errorbar(Temperature, data.ene, fmt='none', xerr=0, yerr= errors.ene);
     plt.legend(loc='best', fontsize=15); 
     plt.xlabel("Temperature (T)", fontsize=20);
     plt.ylabel("Energy ", fontsize=20);
     
     sp =  f.add_subplot(2, 2, 2 );
-    plt.plot(Temperature, data.mag, '*', color="#348ABD", label='Magnetization');
-    plt.errorbar(Temperature, data.mag, fmt='none', xerr=0, yerr= errors.mag)
+    plt.plot(Temperature, abs(data["mag^2"]), '*', color="#348ABD", label='Magnetization');
+#    plt.errorbar(Temperature, abs(data.mag), fmt='none', xerr=0, yerr= errors.mag)
     plt.legend(loc='best', fontsize=15); 
     plt.xlabel("Temperature (T)", fontsize=20);
     plt.ylabel("Magnetization ", fontsize=20);
@@ -102,18 +123,18 @@ def observables_fig(Temperature, data, errors, L, epochs):
     plt.savefig("figures/observables_{}_grid_{}_steps.png".format(L, epochs))
     plt.show()
     
-def observables_fig_Metropolis(T, E, M, C, X, EE, EM):
+def observables_fig_Metropolis(T, E, M, C, X): #EE, EM
     f = plt.figure(figsize=(18, 10), dpi=80, linewidth=3, facecolor='w', edgecolor='k');    
 
     sp =  f.add_subplot(2, 2, 1 );
     plt.plot(T, E, 'o', color="#A60628", label=' Energy');
-    plt.errorbar(T, E, fmt='none', xerr=0, yerr= EE);
+ #   plt.errorbar(T, E, fmt='none', xerr=0, yerr= EE);
     plt.xlabel("Temperature (T)", fontsize=20);
     plt.ylabel("Energy ", fontsize=20);
     
     sp =  f.add_subplot(2, 2, 2 );
     plt.plot(T, abs(M), '*', color="#348ABD", label='Magnetization');
-    plt.errorbar(T, abs(M), fmt='none', xerr=0, yerr= EM)
+ #   plt.errorbar(T, abs(M), fmt='none', xerr=0, yerr= EM)
     plt.xlabel("Temperature (T)", fontsize=20);
     plt.ylabel("Magnetization ", fontsize=20);
 

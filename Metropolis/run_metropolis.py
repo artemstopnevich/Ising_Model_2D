@@ -17,8 +17,8 @@ import Metropolis.ising as ising
 
 # model parameters
 N = 32
-nT = 30
-epochs =3000
+nT = 100
+epochs = 8000
 
 # observables arrays
 Field           = np.zeros((N+2,N+2), dtype=np.int32)
@@ -27,8 +27,8 @@ Magnetization   = np.zeros((nT), dtype=np.float64)
 SpecificHeat    = np.zeros((nT), dtype=np.float64)
 Susceptibility  = np.zeros((nT), dtype=np.float64)
 Binder          = np.zeros((nT), dtype=np.float64)
-Error_Ene       = np.zeros((nT), dtype=np.float64)
-Error_Mag       = np.zeros((nT), dtype=np.float64)
+#Error_Ene       = np.zeros((nT), dtype=np.float64)
+#Error_Mag       = np.zeros((nT), dtype=np.float64)
 
 #Temperature
 Temperature = np.linspace(1.0,4.0, nT)
@@ -38,10 +38,10 @@ Beta = 1.0/Temperature   # set k_B = 1
 Ising = ising.Ising(N, nT, epochs)
 
 Ising.twoD(Field, Energy, Magnetization, SpecificHeat, Susceptibility, 
-           Beta, Binder, Error_Ene, Error_Mag)
+           Beta, Binder)
 
 
 
 # Visualization
-observables_fig_Metropolis(Temperature, Energy, Magnetization, SpecificHeat, Susceptibility, Error_Ene, Error_Mag)
+observables_fig_Metropolis(Temperature, Energy, Magnetization, SpecificHeat, Susceptibility)
 

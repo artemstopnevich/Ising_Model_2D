@@ -18,14 +18,16 @@ from core_functions.physical_measures import observables_fig
 #sc_visual = False
 
 # initialise 2D grid
-L = 32
+L = 64
 N = (L,L)
 #Lattice = np.random.choice([-1,1], N)
-T = 1.0
+T = 2.2
 beta = 1.0/T; J = 1.0; 
 
 #simulation parameters
 epochs = 2000;
 nearest_neighbors = 1;
 
-run_cluster_sim(epochs, N, J, beta, disp_cutoff = 100, error=False)
+Lattice = 2 * np.random.randint(0, 2, N) - 1;
+
+run_cluster_sim(Lattice, epochs, N, J, beta, disp_cutoff = 100)

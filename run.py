@@ -21,7 +21,7 @@ MetropolisBinder = False
 # Swendsen-Wang Cluster Algo
 Cluster = False
 # Modes:
-ClusterObservables = False
+ClusterObservables = True
 ClusterSim = False
 ClusterBinder = False
 
