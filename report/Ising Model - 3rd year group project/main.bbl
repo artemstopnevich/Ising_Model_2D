@@ -1,0 +1,80 @@
+\begin{thebibliography}{10}
+
+\bibitem{black}
+{\sc Black, F., and Scholes, M.}
+\newblock {The Pricing of Options and Corporate Liabilities}.
+\newblock {\em Journal of Political Economy Vol. 81\/} (1973), 637--654.
+
+\bibitem{callan}
+{\sc Callan, E., and Shapiro, D.}
+\newblock {A Theory of Social Imitation}.
+\newblock {\em Physics Today 27\/} (1974).
+
+\bibitem{churchill}
+{\sc Churchill, R.~V.}
+\newblock {\em {Fourier series and boundary value problem (2nd Ed.)}}.
+\newblock New York, NY: McGraw-Hill, 1963.
+
+\bibitem{oliveira}
+{\sc {de Oliveira}, M., and Chiappin, J.}
+\newblock Monte carlo simulation of the quantum transverse ising model.
+\newblock {\em Physica A: Statistical Mechanics and its Applications 238}, 1
+  (1997), 307--316.
+
+\bibitem{ising}
+{\sc Ising, E.}
+\newblock {Beitrag zur Theorie des Ferromagnetismus}.
+\newblock {\em Z. Phys. 31 (1)\/} (1925), 253--258.
+
+\bibitem{kotze}
+{\sc {Jacques Kotze}}.
+\newblock {Introduction to Monte Carlo methods for an Ising Model of a
+  Ferromagnet}.
+
+\bibitem{janke}
+{\sc Janke, W.}
+\newblock {\em {Monte Carlo Methods in Classical Statistical Physics /
+  Computational Many-Particle Physics}}.
+\newblock Springer Berlin Heidelberg, 2008.
+
+\bibitem{lenz}
+{\sc Lenz, W.}
+\newblock {Beiträge zum Verständnis der magnetischen Eigenschaften in festen
+  Körpern}.
+\newblock {\em Physikalische Zeitschrift 21\/} (1920), 613--615.
+
+\bibitem{marchand}
+{\sc Marchand, D.}
+\newblock {Classical Monte Carlo and the Metropolis Algorithm: Revisiting the
+  2D Ising Model}.
+\newblock Department of Physics and Astronomy, University of British Columbia.
+
+\bibitem{sandvik}
+{\sc Sandvik, A.~W.}
+\newblock {Monte Carlo simulations in classical statistical physics}.
+\newblock Department of Physics, Boston University.
+
+\bibitem{SW}
+{\sc Swendsen., R.~H., and Wang, J.-S.}
+\newblock {Nonuniversal critical dynamics in Monte Carlo simulations}.
+\newblock {\em Physical Review Letters 58\/} (1987), 86--88.
+\newblock American Physical Society (APS).
+
+\bibitem{vaga}
+{\sc Vaga, T.}
+\newblock {The Coherent Market Hypothesis}.
+\newblock {\em Financial Analysts Journal\/} (December/January 1991).
+
+\bibitem{weidlich}
+{\sc Weidlich, W.}
+\newblock {The Stattistical Description of Polarization Phenomena is Society}.
+\newblock {\em {British Journal of Math. Statist. Psychology} 24\/} (1971),
+  251--266.
+
+\bibitem{Wolff}
+{\sc Wolff, U.}
+\newblock {Collective Monte Carlo Updating for Spin Systems}.
+\newblock {\em Physical Review Letters 62\/} (1989), 361--364.
+\newblock American Physical Society (APS).
+
+\end{thebibliography}

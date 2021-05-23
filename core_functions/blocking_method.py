@@ -30,3 +30,20 @@ def blocking_error(A, num_blocks):
 
     return error
 
+
+def blocking_method(A, step, n, epochs, iNs, data):
+
+    if(step < epochs-1):
+        data[step] = A*iNs;
+        return 0
+    else:
+        data[step] = A*iNs;
+        block_errors = np.zeros((n), dtype = np.float64)
+        blocks = np.array_split(data, n)
+        block_means = np.mean(blocks, axis = 1)
+        global_mean = np.mean(data)
+        for i in range(n):
+            block_errors[i] = (block_means[i] - global_mean)**2
+        error = np.sqrt(np.sum(block_errors))/n
+        return error
+

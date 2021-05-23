@@ -13,30 +13,24 @@ Created on Tue Mar 23 14:14:50 2021
 '''
 
 # Metropolis Algo - enable with (Metropolis = True) and choose the mode
-Metropolis = True
+Metropolis =  True
 # Modes:
 MetropolisObservables = True
 MetropolisBinder = False
 
 # Swendsen-Wang Cluster Algo
-Cluster = False
+SW = False
 # Modes:
-ClusterObservables = True
-ClusterSim = False
-ClusterBinder = False
+SWObservables = True
+SWSim = False
+SWBinder = False
 
-
-if Cluster == True:
-    print("2D Ising Model: Cluster Algorithm")
-    if ClusterObservables == True:
-        print("mode: Physical Observables")
-        import SwendsenWang.run_cluster
-    if ClusterSim == True:
-        print("mode: Epochs simulation")
-        import SwendsenWang.run_cluster_sim
-    if ClusterBinder == True:
-        print("mode: Binder Ratios")
-        import SwendsenWang.run_binder
+# Wolff Cluster Algo
+W = False
+# Modes:
+WObservables = True
+WSim = False
+WBinder = False
 
 if Metropolis == True:
     print("2D Ising Model: Metropolis Algorithm")
@@ -46,3 +40,28 @@ if Metropolis == True:
     if MetropolisBinder == True:
         print("mode: Binder Ratios")
         import Metropolis.run_binder_metropolis
+        
+if SW == True:
+    print("2D Ising Model: Swendsen-Wang Cluster Algorithm")
+    if SWObservables == True:
+        print("mode: Physical Observables")
+        import SwendsenWang.swendsenwang_cluster
+    if SWSim == True:
+        print("mode: Epochs simulation")
+        import SwendsenWang.swendsenwang_cluster_sim
+    if SWBinder == True:
+        print("mode: Binder Ratios")
+        import SwendsenWang.swendsenwang_binder
+
+if W == True:
+    print("2D Ising Model: Wolff Cluster Algorithm")
+    if WObservables == True:
+        print("mode: Physical Observables")
+        import Wolff.wolff_cluster
+    if WSim == True:
+        print("mode: Epochs simulation")
+        import Wolff.wolff_cluster_sim
+    if WBinder == True:
+        print("mode: Binder Ratios")
+        import Wolff.wolff_binder
+        

@@ -8,6 +8,7 @@ Created on Tue Mar 23 10:00:35 2021
 
 import numpy as np
 from copy import copy
+import math
 import matplotlib.pyplot as plt
 from scipy.ndimage.interpolation import shift
 
@@ -89,70 +90,67 @@ def calcMag(Field):
             mag += Field[i,j];
     return mag
 
-def observables_fig(Temperature, data, L, epochs):
-    f = plt.figure(figsize=(18, 10), dpi=80, linewidth=3, facecolor='w', edgecolor='k');    
-    f.suptitle("Observables of {}x{} lattice with {} iterations".format(L,L,epochs), fontsize=20);
-    sp =  f.add_subplot(2, 2, 1 );
-    plt.plot(Temperature, data.ene, 'o', color="#A60628", label=' Energy');
-#    plt.errorbar(Temperature, data.ene, fmt='none', xerr=0, yerr= errors.ene);
-    plt.legend(loc='best', fontsize=15); 
-    plt.xlabel("Temperature (T)", fontsize=20);
-    plt.ylabel("Energy ", fontsize=20);
-    
-    sp =  f.add_subplot(2, 2, 2 );
-    plt.plot(Temperature, abs(data["mag^2"]), '*', color="#348ABD", label='Magnetization');
-#    plt.errorbar(Temperature, abs(data.mag), fmt='none', xerr=0, yerr= errors.mag)
-    plt.legend(loc='best', fontsize=15); 
-    plt.xlabel("Temperature (T)", fontsize=20);
-    plt.ylabel("Magnetization ", fontsize=20);
-    
-    
-    sp =  f.add_subplot(2, 2, 3 );
-    plt.plot(Temperature, data.sp_heat, 'd', color='black', label='Specific Heat');
-    plt.legend(loc='best', fontsize=15); 
-    plt.xlabel("Temperature (T)", fontsize=20);
-    plt.ylabel("Specific Heat ", fontsize=20);
-    
-    
-    sp =  f.add_subplot(2, 2, 4 );
-    plt.plot(Temperature, data.susc, 's', label='Susceptebility');
-    plt.legend(loc='best', fontsize=15); 
-    plt.xlabel("Temperature (T)", fontsize=20);
-    plt.ylabel("Suseptibility", fontsize=20);
-    
-    plt.savefig("figures/observables_{}_grid_{}_steps.png".format(L, epochs))
-    plt.show()
-    
-def observables_fig_Metropolis(T, E, M, C, X): #EE, EM
-    f = plt.figure(figsize=(18, 10), dpi=80, linewidth=3, facecolor='w', edgecolor='k');    
-
-    sp =  f.add_subplot(2, 2, 1 );
-    plt.plot(T, E, 'o', color="#A60628", label=' Energy');
- #   plt.errorbar(T, E, fmt='none', xerr=0, yerr= EE);
-    plt.xlabel("Temperature (T)", fontsize=20);
-    plt.ylabel("Energy ", fontsize=20);
-    
-    sp =  f.add_subplot(2, 2, 2 );
-    plt.plot(T, abs(M), '*', color="#348ABD", label='Magnetization');
- #   plt.errorbar(T, abs(M), fmt='none', xerr=0, yerr= EM)
-    plt.xlabel("Temperature (T)", fontsize=20);
-    plt.ylabel("Magnetization ", fontsize=20);
+def observables_fig(T, E, M, EE, EM, L, epochs,f, sp1, sp2, m, c):
 
 
+    sp1.plot(T, E, m, color = c, label='{}x{}'.format(L,L), markersize = 4);
+    sp1.errorbar(T, E, color=c, fmt='none', xerr=0, yerr= EE);
+    sp1.set_xlabel("Temperature (T)", fontsize=20);
+    sp1.set_ylabel("Energy ", fontsize=20);
+    sp1.legend(loc='best', fontsize=15)
+    
+    sp2.plot(T, abs(M), m, color = c, label='{}x{}'.format(L,L), markersize = 4);
+    sp2.errorbar(T, abs(M), color=c, fmt='none', xerr=0, yerr= EM)
+    sp2.set_xlabel("Temperature (T)", fontsize=20);
+    sp2.set_ylabel("Magnetization ", fontsize=20);
+    sp2.legend(loc='best', fontsize=15)
+    
+    '''    
     sp =  f.add_subplot(2, 2, 3 );
     plt.plot(T, C, 'd', color='black', label='Specific Heat');
+    plt.axvline(x=2/math.log(1 + math.sqrt(2)), linestyle='--', color='r', label = 'T_crit')
+    plt.legend(loc='best', fontsize=15); 
     plt.xlabel("Temperature (T)", fontsize=20);
     plt.ylabel("Specific Heat ", fontsize=20);
     
     
     sp =  f.add_subplot(2, 2, 4 );
-    plt.plot(T, X, 's', label='Specific Heat');
+    plt.plot(T,X, 's', label='Susceptebility');
+    plt.axvline(x=2/math.log(1 + math.sqrt(2)), linestyle='--', color='r', label = 'T_crit')
     plt.legend(loc='best', fontsize=15); 
     plt.xlabel("Temperature (T)", fontsize=20);
     plt.ylabel("Suseptibility", fontsize=20);
+    '''    
+
     
+def observables_fig_Metropolis(T, E, M, C, X, EE, EM, EC, EX, N, f, sp1, sp2, c, m):
+    '''
+    sp1.plot(T, E, m, color = c, label='{}x{}'.format(N,N), markersize = 4);
+    sp1.errorbar(T, E, color=c, fmt='none', xerr=0, yerr= EE);
+#    sp1.set_xlabel("Temperature (T)", fontsize=20);
+    sp1.set_ylabel("Energy ", fontsize=20);
+    sp1.legend(loc='best', fontsize=15)
     
-    plt.show()
+    '''
+    sp1.plot(T, M, m, color =c, label='N=220', markersize = 4);
+    sp1.errorbar(T, M, color=c, fmt='none', xerr=0, yerr= EM)
+    sp1.set_xlabel("Temperature (T)", fontsize=20);
+    sp1.set_ylabel("Magnetization ", fontsize=20);
+    sp1.legend(loc='best', fontsize=15);
+    '''
+    sp3.plot(T, C, m, color=c, label='{}x{}'.format(N,N), markersize = 4);
+    sp3.errorbar(T, C, color=c, fmt='none', xerr=0, yerr= EC);
+    sp3.set_xlabel("Temperature (T)", fontsize=20);
+    sp3.set_ylabel("Specific Heat ", fontsize=20);
+    sp3.legend(loc='best', fontsize=15)
+    '''    
+    sp2.plot(T, X, m, color = c, label='N=220', markersize = 4);
+    sp2.errorbar(T, X, color=c, fmt='none', xerr=0, yerr= EX);
+    sp2.set_xlabel("Temperature (T)", fontsize=20);
+    sp2.set_ylabel("Susceptibility", fontsize=20);
+    sp2.legend(loc='best', fontsize=15);    
+   
+
     
 # import math 
 # M_T[t] = pow(1- pow(np.sinh(2*iT), -4), 1/8)

@@ -1,0 +1,71 @@
+\section{Results}
+
+\subsection{Autocorrelation}
+\label{sec:auto}
+
+In order to compare the speed and effectiveness of each algorithm presented in Section \ref{monte-carlo} we will consider and benchmark the autocorrelation times of the programmes against each other (to determine how fast measurements become decorrelated). We will take the total magnetisation, $M$ as our observable. Let $O_{i} = |M|_{i} - \langle |M| \rangle$, where $|M|_{i}$ is the \textit{i-th} measurement of $|M|$. Hence, autocorrelation function $C(t)$ of $|M|$ is defined as:
+
+\begin{equation}
+	\label{eq:autocorrelation}
+	C(t) \equiv \frac{\frac{1}{N-t} \sum_{i} O_{i}O_{i+t}}{\langle O^2 \rangle} \propto e^{-t/\tau}
+\end{equation}
+
+where one could expect statistical independece as $t \to \infty$ and the autocorrelation function \ref{eq:autocorrelation} apporaches $0$ as $t \to \infty$. 
+
+In Figure \ref{fig:autocorrelation} we will consider the autocorrelation functions of the three algorithms presented in this paper on a $64 \times 64$ lattice. 
+
+\begin{figure}[h!]
+
+  \includegraphics[width=0.6\textwidth]{figures/autocorrelation.png}
+  \centering
+  \caption{Autocorrelation functions plotted against evolution time for three different Monte-Carlo algorithms: Metropolis, Swendsen-Wang and Wolff measured at the critical temperature, $T_{crit} = 2.269$}
+   \label{fig:autocorrelation}
+\end{figure}
+
+It appears clear that the autocorrelation time of the Metropolis Algorithm is significantly larger than of the cluster counterparts. single-cluster Wolff algorithm produces the shortest autocorrelation time.
+
+In terms of absolute CPU computation times, cluster algorithms also outcompete the single-spin-flip Metropolis algorithm as shown in Table \ref{tab:methods}:
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c |c |c|}
+		\hline
+		\textbf{Method} & \textbf{time(ms)/iteration}	 &\textbf{$\tau$}\\
+		\hline
+		Swendsen-Wang 	& 0.14 	& 6.4\\
+		\hline
+		Wolff		& 0.17	& 1.6\\
+		\hline
+		Metropolis & 1.58	& 143\\
+		\hline	
+	\end{tabular}
+	\caption{Measured in real (cpu/wall-clock) time, Cluster algorithms are compared to the Metropolis (at the critical temperature $\beta \approx 0.44$)}
+	\label{tab:methods}
+\end{table}
+
+We will also examine how well they cover the phase space of the spins and finally we will measure the computation times for $64 \times 64$ lattice simulated with each of the algorithms.
+
+\begin{figure}[h!]
+  \label{fig:config}
+  \includegraphics[width=0.6\textwidth]{figures/configs_compare.png}
+  \centering
+  \caption{Total absolute magnetisation values of the $64 \times 64$ lattice at each iteration of the algorithms. }
+\end{figure}
+
+\subsection{Energy Measurements}
+
+From Section \ref{sec:auto} we have determined that single-cluster Wolff algorithm is best suited to perform Ising Model simulation, therefore we will determine the physical observables through it. Several lattice sizes are used, namely, $8 \times 8$, $16 \times 16$, $32 \times 32$ and $64 \times 64$.
+
+
+
+\subsection{Magnetisation Measurements}
+
+\subsection{Error Analysis}
+
+To avoid the uncertainty of recording correlated errors (which makes the whole analysis wrong), one can use \textit{the blocking method}, which 
+
+\subsection{Critical Temperature}
+
+\subsubsection*{Finite size scaling}
+
+\subsubsection*{Binder ratios}

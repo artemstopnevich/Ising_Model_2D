@@ -1,0 +1,167 @@
+\section{Coherent Markets}
+
+In this section a multi-factor model of financial market behaviour is proposed, based on the physical Ising model. 
+
+
+ \subsection{Hypothesis of Coherent Markets}
+ 
+Widely known Chaos Theory attempts to predict market price movements in terms of non-linear deterministic models. In contrast, the Coherent Market Hypothesis (CMH) is a non-linear statistical model. The model was developed by Tonis Vaga in 1991 \cite{vaga}. The Vaga model is based on the social simulation theory, which in turn is an elaboration of the physical Ising model describing coherent molecular behaviour in ferromagnetics.
+
+The Ising model offers a convenient model that can be applied to systems whose state is determined by the level of internal clustering and the effects of external forces.
+
+\subsubsection*{The theory of social imitation} The theory of social imitation became known after the work of E. Callan and D. Shapiro, whose article "A Theory of Social Imitation" was published in Physics Today in 1974 \cite{callan}. It is worth noting that Wolfrang Weidlich's work \cite{weidlich} can be considered the starting point of this theory. Weidlich's main idea was based on the assumption that the behaviour of individuals in social groups is similar to that of molecules in a bar of iron. Under some conditions they behave independently of each other. In other cases, the thinking of the individuals is polarised in the same direction, i.e. the individuals will act as a crowd, and individual rational thinking is replaced by collective thinking. 
+
+In the same way, a bar of iron exposed to a magnetic field for a sufficiently long time will become strongly polarised and, only after the influence of external factors has ceased, will it slowly return to an unpolarised state. In fact, Weidlich has extended Ising's well-known model of ferromagnetism to the polarisation of opinion in social groups.
+
+\subsubsection*{Hypothesis of coherent markets}  In 1990, Tonis Vaga proposed the coherent market hypothesis in an article \cite{vaga} . Vaga used the theory of social simulation to model the polarisation of public opinion. He suggested that there is a relationship between market polarisation and returns on securities.
+
+Note that in applying the Ising model to modelling returns on financial instruments, some features of the stock market should be taken into account. Unlike the lattice, the stock market is an open system, which implies a continuous flow of money to keep the continuous possibility of phase transitions from "disorder" to a more organised state. 
+
+It can be assumed that industrial groups in the stock market are analogous to the spins in a lattice, and stock market returns are proportional to the difference between the number of investment groups trading up and the number trading down, i.e. magnetisation of the lattice. Market returns can oscillate randomly around zero at high temperature limits or, under special conditions, they can exhibit a high degree of polarisation which is accompanied by a large difference in returns between investors (around the Curie point). From now on, such notions as investor, trader, trader will be regarded as synonyms.
+
+To transfer the Ising model to capital markets, assume the following assumptions. Let n be the number of investment groups in the financial market (the number of investors). The opinion of investors who expect an increase in quotations can be denoted as "+" (we will call it positive or bullish), similarly, the opinion of investors who expect a fall in quotations, we will denote as "-" (we will call it negative or bearish), while at any time investor may change their opinion to the opposite. Hence we can define the probability distribution function as follows:
+ 
+ \begin{equation}
+ 	\label{pdf_cmh}
+ 	f(\alpha) = \frac{c}{Q(\alpha)} * exp \left( 2 \int_{-1/2}^{\alpha} \frac{K(\alpha)}{Q(\alpha)} \right)
+\end{equation}
+
+where $c$ - is the normalisation constant. $K(\alpha)$ and $Q(\alpha)$ are the drift and diffusion coefficients accordingly:
+
+\begin{equation}
+	\label{K_cmh}
+	K(\alpha) = [ W_{-+}(\alpha) - W_{+-}(\alpha) ],
+\end{equation}
+\begin{equation}
+	\label{Q_cmh}
+	Q(\alpha) = [ W_{+-} (\alpha) + W_{-+} (\alpha) ].
+\end{equation}
+
+The full derivation of \cref{pdf_cmh,K_cmh,Q_cmh} can be found in Appendix \ref{vaga_ising}.
+
+\subsection{Market Phases}
+ 
+ A change in the control parameters changes the shape of the probability function (10 )\todo{reference eqs properly}. The combination of the system parameter values gives the main market states (market phases):
+ 
+\begin{enumerate}
+	\item \textbf{An efficient market}, i.e. a market in which financial instruments behave as a random time series, and therefore such a market cannot be predictable. In this case, investors act independently and information is instantly reflected in prices. 
+ 
+	\item \textbf{Transitional market states}. Occur due to an increase in "group consciousness", i.e. there is some shift in investor sentiment.
+
+	\item \textbf{Chaotic market}. A market in which financial instruments have a "long-term memory". Investor sentiment in this case is characterised by the fact that it spreads quickly in the "group consciousness" and the fundamental conditions are neutral or not yet defined.
+
+	\item \textbf{Coherent market} in which fundamental trends are indicated and, in addition, as in case 3, a "long-term memory" is present. These are often trend-following markets with low risk to profit.
+\end{enumerate}
+ 
+
+Figure \ref{fig:market_phases} illustrates the dependence of market condition on prevailing investor sentiment and fundamental economic conditions by analogy with the Boston Matrix characterising enterprise type. Below the critical transition threshold (at $k=2$), the market state is dominated by random wandering and rapid changes in market sentiment. Above the transition threshold, if the fundamental data is positive, a coherent bull market can be seen, if the fundamental data is negative, a coherent bear market can be seen. When fundamental data does not provide a clean direction for investors, you get a chaotic market.
+
+\begin{figure}[h!]
+  \includegraphics[width=0.7\textwidth]{figures/market_phases.png}
+  \centering
+  \caption{Dependence of market condition on h and k}
+  \label{fig:market_phases}
+\end{figure}
+\newpage
+
+\subsubsection*{Random Walk scenario}
+
+The probability density function \todo{ref equation} can be greatly simplified if investor behaviour is not group behaviour, i.e. when $k < 2.27$. Assuming that the fundamental data is neutral (i.e. $h=0$), the function can be expressed in the following form:  
+
+\begin{equation}
+	f(q) = \frac{1}{\sigma \sqrt{\pi}} e^{-\frac{q^2}{\sigma^2}}
+\end{equation}
+
+
+Thus, we get the probability density function of the normal law distribution, reflecting the state of 	true random walk (Figure \ref{fig:random_market}). Theoretically, random wandering in capital markets, depending on the fundamentals, can cause both insignificant sustained gains and insignificant sustained losses. As Vaga observes, historically, however, due to transaction costs random walking in markets is accompanied by minor losses and is most often associated with bearish markets.
+
+
+\begin{figure}[h!]
+  \includegraphics[width=0.5\textwidth]{figures/random_market.png}
+  \centering
+  \caption{Dependence of market condition on h and k}
+  \label{fig:random_market}
+\end{figure}
+
+\todo[inline]{include probability density function graph here}
+
+\subsubsection*{Transition to crowd regime}
+
+In case k increases slightly up to 2 (the value of the critical transition threshold) with unchanged fundamental conditions ($0 \approx h$), the variance in equation \todo{equation} becomes very large and the normal distribution for the probability density function of market returns (as well as the random walk model) is no longer applicable. The probability density function becomes broader and flatter. We get an unstable transition situation (Figure \ref{fig:transition_market}).
+
+\begin{figure}[h!]
+  \includegraphics[width=0.5\textwidth]{figures/transition_market.png}
+  \centering
+  \caption{Dependence of market condition on h and k}
+  \label{fig:transition_market}
+\end{figure}
+
+This suggests a highly inefficient market in which large and prolonged shifts in investor sentiment can be expected. There is a "long-term memory" in the market (so information is not impaired), there are trends, and they persist until new information changes them.
+
+The potential well into crowd mode will have an almost horizontal bottom over a wide range of expected returns. During this period of volatility, anything can happen.This is the case when there is neutral fundamental news in the market, at the same time a slight shift in the nature of the fundamental news can cause the distribution curve to skew towards this shift.
+
+\subsubsection*{Chaotic markets}
+
+When the crowd behaviour indicator k exceeds the critical level $k_{crit} = 2$ and the fundamental data is neutral or very small ($0 \approx h$), the Ising model will show a double bottom of the potential well and correspondingly a bimodal probability distribution function (any positive or negative information can lead to a radical change, this is what the probability density function reflects by forming two peaks). There is a high level of polarisation among investors, but in the absence of a strong fundamental bias it is difficult for them to identify a clear direction in which the crowd could move, whether in a bearish or bullish trend.  
+
+\begin{figure}[h!]
+  \includegraphics[width=0.5\textwidth]{figures/chaotic_market.png}
+  \centering
+  \caption{Dependence of market condition on h and k}
+  \label{fig:chaotic_market}
+\end{figure}
+
+Due to the lack of fundamental information, investors track each other's actions, so any rumour can cause panic and a sudden shift in direction from bullish to bearish or vice versa is likely. The likelihood of a major shift in investor sentiment increases when the prevailing direction of investor sentiment runs counter to the direction of the external shift in fundamental data.
+
+The probability density function shows that the probability of a bullish market condition is still quite possible and furthermore there is a crowd mode in the market, nevertheless the crowd mode is overlaid by bearish fundamental news and this could cause a potentially dangerous situation. Even minor negative impulses can send a particle (market returns) over the small barrier in the centre of the potential well into a more likely state of pure bearish sentiment and negative returns.
+
+A chaotic market can be described as quasi-efficient. As long as the market is in crowd mode, any direction of movement in securities prices can be sustained if supported at least by weak news that "fuels" the movement in that direction. This was the situation in the first 8 months of 1989 (Figure \ref{fig:SP_1989}), when good news was reflected in high market prices and bad news, on the contrary, in low prices.
+
+\begin{figure}[h!]
+	\setlength{\fboxsep}{0pt}
+	\setlength{\fboxrule}{1pt}
+	\fbox{\includegraphics[width=0.7\textwidth]{figures/SP_1989.png}}
+  	\centering
+  	\caption{Example of "Chaotic Markets" phase of S\&P  500 index in 1989}
+  	\label{fig:SP_1989}
+\end{figure}
+
+\subsubsection*{Coherent bullish market}
+
+When strong positive fundamentals ($h \gg 0$) are superimposed on the crowd mode ($k < 2.27$) - the situation favours a coherent bull market. Such a market can be seen as a chaotic market in which the bearish side of the potential well is high and its corresponding probability distribution proportion is reduced.
+
+Figure \ref{fig:bull_market} shows the distribution density function of a coherent bull market. The distribution has a rather long tail going far into the negative part. The model shows that despite bullish conditions there is still a small probability of a loss in the market. In such a market the risk of loss is low and overall volatility is falling. These conditions are not the most suitable for buying securities.
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{figures/bull_market.png}
+  \caption{bull market}
+  \label{fig:bull_market}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{figures/bear_market.png}
+  \caption{bear market}
+  \label{fig:bear_market}
+\end{subfigure}
+\caption{A figure with two subfigures}
+\label{fig:coherent_markets}
+\end{figure}
+
+
+As Vaga points out, most long-term market returns come from coherent markets. When a coherent market ends and a state of chaotic market or random wandering occurs, it is too late to hope for a return on investment.
+
+\subsubsection*{Coherent bearish market}
+
+Coherent bear markets appear when strong negative fundamentals ($h \ll 0$) are present in the market, coupled with investor behaviour in crowd mode ($k>2$). It is essentially the mirror image of a coherent bull market. A coherent bear market can be thought of as a chaotic market in which the bullish side of the potential well is high and the corresponding proportion of the probability distribution decreases. The standard deviation is the same as in a coherent bull market, but the expected loss is similar to a similar gain in a bull market. A good example of a coherent bear market is the 1929 crash in the US stock market, which lasted several years.
+
+
+Figure \ref{fig:bear_market} shows an example of such a market. The probability density function is heavily skewed to the left, but a long positive tail remains, indicating that days of positive market returns remain possible, even if their probabilities are very low. Positive fundamental news can have a smaller effect on the market than negative news of the same magnitude. In such markets, by making short sales, a trader can generate returns comparable to those of investing in a bullish market.
+ 
+\subsection{Parameters of the Vaga-Ising model}
+
+
+ 
+\subsection{Testing the Trading System}

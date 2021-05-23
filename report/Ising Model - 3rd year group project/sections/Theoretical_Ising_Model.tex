@@ -1,0 +1,108 @@
+\section{Theoretical Ising Model}
+
+\subsection{Background}
+The model was originally proposed by W. Lenz in 1920 \cite{lenz}, and investigated by Ernst Ising for the one-dimensional case, after whom it was named \cite{ising}. In this model, each vertex of the crystal lattice takes a number: $+1$ or $-1$, - the "up" or "down" spin. Thus, a lattice of $N$ numbers of spins can be in $2^N$ states. Each state corresponds to an energy, which is obtained from the pairwise interaction of spins of neighbouring atoms: 
+
+\begin{equation}
+\label{eq:ham}
+    E = -J \sum_{<i,j>}{s_is_j}
+\end{equation}
+
+where $J$ is the interaction energy of neighbouring spins (the exchange interaction constant is the same for all pairs); $s_i$ and $s_j$ are spins. In this case $J > 0$ describes the behaviour of a ferromagnet, $J < 0$ of an antiferromagnet.
+
+\subsection{Model}
+
+We will simplify the model by setting the coupling constant to $1$ for near neighbour (NN) interactions and $0$ everywhere else:
+
+\begin{equation}
+	J_{ij} = \begin{cases}
+			1, & \mbox{if } i,j \mbox{ are NNs}\\
+			0, & \mbox{else}
+		   \end{cases}
+\end{equation}
+
+
+If we place the model in an external magnetic field $H$, the total energy will take the form:
+
+\begin{equation}
+    E = -J \sum_{<i,j>}{s_is_j} - H \sum_{i}{s_i}
+\end{equation}
+
+For dimensions, $d > 1$ the model exhibits a phase transition between a disordered (paramagnetic) state at high temperatures and an ordered (ferromagnetic) state at low temperatures (Fig. \ref{fig:ising128}). A magnetic moment is produced as a result of the alignment of spins in the same direction. 
+
+\begin{figure}[h!]
+	\label{fig:ising128}
+	\includegraphics[width=0.8\textwidth]{figures/ising_lattice_128.png}
+	\centering
+	\caption{An example of a lattice of randomly flipped spins in the.}
+\end{figure}
+
+By using \textit{importance sampling}, a configuration of a large but finite many-body system can be generated according to Boltzmann distribution, so that thermal expectation values are obtained as simple arithmetic averages of functions “measured” on the configurations \cite{sandvik}:
+
+\begin{equation}
+	\label{eq:1}
+	P(\alpha) = exp \left(\frac{-E(\alpha)}{kT} \right)
+\end{equation}
+
+
+where $\alpha$ is the total state of the system, $E$ is the energy of the state, $k$ is the Boltzmann constant and $T$ is the temperature of the system.
+
+By knowing the energy of each possible state of the system, one can use the Boltzmann distribution (Eq.\ref{eq:1}) to determine the probability of the system to be in each state at a given temperature. One can calculate the macroscopic properties of the system, e.g. magnetisation and energy:
+
+\begin{equation}
+	\langle M \rangle = \sum_{\alpha} M(\alpha) P(\alpha);
+\end{equation}
+\begin{equation}
+	\langle E \rangle = \sum_{\alpha} E(\alpha) P(\alpha)
+\end{equation}
+
+However, in practise these are very heavy calculations even for the computers. For a two spin orientation problem there are $N$ spins and hence a total of $2^{N}$ states is possible and with a sufficiently large number of spins it is difficult to obtain numerical results. \hl{Therefore a statistical approach must be used for modelling such a system.}
+
+\subsection{Physical Observables}
+
+The thermodynamic quantities should only be calculated when the system has reached equilibrium. For a large number of experiments, the mean value of the physical quantity $A$, is conveniently assumed to be:
+
+\begin{equation}
+	\langle A \rangle = \lim_{N \to \infty} \frac{1}{N} \sum^{N}_{\alpha} A(\alpha)
+\end{equation}
+
+The summation is done over the whole number of monte-carlo steps, $n$.
+
+The observables of particular interest are $\langle E \rangle$, $\langle E^2 \rangle$, $\langle M \rangle$, $\langle M^2 \rangle$. These are calculated in the following way,
+
+\begin{equation}
+	 \langle M \rangle  = \frac{1}{N} \sum^{N}_{\alpha} M(\alpha)
+\end{equation}
+
+$\langle  M^2 \rangle$ is calculated in the same way. To calculate the energy one can use the Hamiltonian given in Eq. \ref{eq:ham},
+
+\begin{equation}
+\label{eq:energy}
+	\langle E \rangle = \frac{1}{2} \langle -J \sum_{\langle i,j \rangle} s_{i} s_{j} \rangle
+\end{equation}
+
+the factor of a half is introduced in order to account for the spins being countedtwice. Eq. \ref{eq:energy} is used in a similar way to determine $\langle E^2 \rangle$.
+
+\todo[inline]{maybe remove all together}
+
+At the critical temperature one can expect fluctuations in the quantities presented above. To show it we can calculate the heat capacity, $C$ and susceptibility, $\chi$ where both include the observable's variance in their equations:
+
+\begin{equation}
+	C = \frac{\delta E}{\delta T}  = \frac{\langle E^2 \rangle - \langle E \rangle^2}{k_{\beta}T^2}
+\end{equation}
+
+\begin{equation}
+	\chi = \frac{\delta M}{\delta T} = \frac{\langle M^2 \rangle - \langle E \rangle^2}{k_{\beta}T}
+\end{equation}
+
+A cumulant is also calculated. This will later be used to ultimately determine the Curie temperature:\todo[inline]{cumulant equation}
+
+
+To solve the boundary problem for the interaction of neighbouring spins on a finite lattice we introduce periodic boundary conditions, i.e the spins on the opposite edges interact with each other. This is best visualised as a 3d torus, with the lattice being the surface area of the geometric shape \cite{kotze}:
+
+\begin{figure}[h!]
+	\label{fig:torus}
+	\includegraphics[width=0.4\textwidth]{figures/torus.png}
+	\centering
+	\caption{An illustration of a three-dimensional torus which is representative ofa two-dimensional lattice with periodic boundary conditions.}
+\end{figure}

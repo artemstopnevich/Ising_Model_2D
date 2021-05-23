@@ -1,0 +1,32 @@
+\newpage
+\appendix
+\section{Balance Equation}
+\label{balance}
+
+Let's consider a detailed balance equation previously shown in Eq. \ref{eq:balance1}:
+
+\begin{equation}
+	\frac{W(\alpha_{i} \to \alpha_{i'})}{W(\alpha_{i'} \to \alpha_{i})} = e^{-(E_{i'} - E_{i})/T}
+\end{equation}
+
+where state $\alpha_{i}$ is the initial state of the transition and state $\alpha_{i'}$ is the final state of the system. Consider $\alpha_{i} \to \alpha_{j} \to \alpha_{i'}$ where $\alpha_{j}$ is some bond state compatible both with $\alpha_{i}$ and $\alpha_{i'}$. Since the clusters in $\alpha_{j}$ are independent, $W(\alpha_{j} \to \alpha_{i}) = W(\alpha_{j} \to \alpha_{i'}) = 1/2^{N_j}$.
+
+Now,
+
+\begin{equation}
+\label{eq:balance3}
+	\frac{W(\alpha_{i} \to \alpha_{j})}{W(\alpha_{i'} \to \alpha_{j})} = 
+	\frac{p^{b}(1-p)^{d_i}}{p^b(1-p)^{d_{i'}}} = 
+	e^{-(E_{i'} - E_{i})/T}
+\end{equation}
+
+where $p = 1- e^{-2/T}$, $b$ is the number of interactions that form a bond and $d_{i,i'}$ are the numbers of similar near-neighbour states, which are not connected by a bond. The last step in Eq. \ref{eq:balance3} comes from $E_{i} = dim \times V - 2(b+d_{i})$. Thus $\alpha_{i} \to \alpha_{j} \to \alpha_{i'}$ and $\alpha_{i'} \to \alpha_{j} \to \alpha_{i}$ satisfy detailed balance for arbitrary $\alpha_{j}$ and the total transition probabilities $\alpha_{i} \to \alpha_{i'}, \alpha_{i'} \to \alpha_{j}$ must do it also.
+
+\section{Blocking Error}
+
+Text of Appendix B is Here
+
+\section{Vaga-Ising Probability Distribution}
+\label{vaga_ising}
+
+Let's denote probability of an opinion change from positive to negative ( i.e. probability of a single spin flip from $-1$ to $+1$) as $p_{+-}(\alpha)$, where $n$ is the total number of traders in the market; and $p_{-+}(\alpha)$ will be the probability of opinion change from negative to positive.

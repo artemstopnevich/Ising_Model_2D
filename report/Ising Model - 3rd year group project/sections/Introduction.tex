@@ -1,0 +1,18 @@
+\newpage
+\section{Introduction}
+
+The Ising model studied in this paper was introduced to understand the nature of ferromagnetism and has influenced the study of phase transitions and critical phenomena in ferromagnets. Moreover, it has also found success in many other areas of research from bioengineering to economics. In the following sections we will study the main properties of a two-dimensional Ising Model and will build an extension for Vaga-Ising case, which is used to simulate the Coherent Market Hypothesis. 
+
+
+\textbf{The Ising Model}. The model was originally proposed by W. Lenz in 1920 \cite{lenz}, and investigated by Ernst Ising for the one-dimensional case, after whom it was named \cite{ising}. In this model, each vertex of the crystal lattice takes a number: $+1$ or $-1$, - the "up" or "down" spin. At the Curie point (a narrow range of temperatures), there is an ordering of magnetic moments or \textit{spontaneous magnetisation}, which entails a phase transition, i.e. the properties of matter change.
+
+In the first part of the paper Ising model is used to investigate the properties of a two-dimensional ferromagnet with respect to its observable properties, namely, magnetisation, energy, susceptibility and specific heat at varying temperatures. The observables are calculated and a phase transition at a critical temperature (Curie point) is illustrated and evaluated. Lastly a finite size scaling analysis is undertaken to determine the critical exponents and the Curie temperature is calculated using a ratio of cumulants with differing lattice sizes. The results obtained from the simulation are compared to exact calculations to endorse the validity of this numerical process.
+
+
+\textbf{Coherent Market Hypothesis}. The second part of the paper will investigate the model proposed by Tonis Vaga \cite{vaga}, who used the physical Ising Model and its critical temperature as the basis for his \textit{Coherent Market} Hypothesis (CMH). The use of physical principles and models has enjoyed profound success in Financial and Economic worlds. The solution to a famous option pricing Black-Scholes equation has been derived 10 years earlier by Churchill (1963) \cite{churchill} when solving the thermal equation of diffusion in solids. In contrast to the aforementioned Black-Scholes model \cite{black}, which was based on efficient market theory and did not allow for long-term price forecasting, the CMH allows for a greater or lesser degree of market forecasting at certain time periods. 
+
+Different market phases defined by the hypothesis will be studied and by using the critical temperature previously found in the paper - a trading system will be set up, which will recognise the market phases of the S\&P index.
+
+
+\textbf{Monte-Carlo methods}. In order to solve a large many-body system problem like the Ising Model one can use Monte-Carlo (MC) simulations, arguably the most powerful numerical tool in statistical physics. In particular we will study the Metropolis Algorithm as the base model and build further extensions using Swendsen-Wang and Wolff cluster algorithms. Furthermore, several coding practises will be benchmarked. The code is mainly delivered in python with extension in cython for performance enhancement.
+

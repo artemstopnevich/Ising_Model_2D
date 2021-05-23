@@ -1,0 +1,178 @@
+\section{Classical Monte Carlo}
+\label{monte-carlo}
+
+The Monte Carlo method is widely used for statistical modelling of systems with many degrees of freedom. It is based on the use of random numbers for machine simulation of probability distributions \cite{janke}. The Monte Carlo is used both for determining various system characteristics within classical spin models, and for studying systems within quantum theory \cite{oliveira}.
+
+In this approach the system is considered in a state of thermodynamic equilibrium at a certain temperature $T$. During the energy exchange with the environment, the energy will change around the equilibrium state, and the average energy of a single particle is proportional to $T$. Implementing a constant random change around an equilibrium state uses the Monte Carlo method and the simulation can be divided into stages:
+
+\begin{enumerate}
+
+    \item Randomly generate the $\alpha_i$ states of the system at a fixed $T$;
+    
+    \item Calculate for these states thermodynamic characteristics near equilibrium (energy $E$, magnetisation $M$, specific heat $C$ and susceptibility $\chi$);
+    
+    \item Average the obtained values.
+    
+\end{enumerate}
+
+
+To begin with one can consider evaluating two N-dimensional sums of integrals:
+
+\begin{equation}
+	\label{mc:1}
+	\begin{split}
+		\langle A \rangle = Z^{-1} \sum_{i_1} \cdots \sum_{i_N} A \left( i_1, \dotsc, i_N \right) W \left( i_1, \dotsc, i_N \right);\\
+		Z = \sum_{i_1} \cdots \sum_{i_N} W \left( i_1, \dotsc, i_N \right),
+	\end{split}
+\end{equation}
+
+where $A$ and $W$ are arbitrary. We will simplify Eq. \ref{mc:1} by defining a configuration $\alpha$ as the collection of all summation indices: $\alpha \equiv \left( i_1, \dotsc, i_N \right)$. Then we can rewrite:
+
+\begin{equation}
+\label{ap:2}
+	\langle A \rangle = \sum_{\alpha} \frac{A_{\alpha}W_{\alpha}}{Z}; 
+	Z =  \sum_{\alpha} W_{\alpha}
+\end{equation}
+
+The probability of a configuration $\alpha$ is accordingly defined as:
+
+\begin{equation}
+	p_{\alpha} = \frac{W_{\alpha}}{Z}
+\end{equation}
+
+In statistical mechanics $Z$ is most commonly referred to as the \textit{partition function}. The weight of the configuration, $W$ is related to the energy through normalised Boltzmann distribution (Eq. \ref{eq:1}), therefore:
+
+\begin{equation}
+	W_{\alpha} = exp(\frac{-E_{\alpha}}{kT})
+\end{equation}
+
+A this point we again encounter a problem of large system sizes, where the number of possible states is so big that we simply cannot add all of the terms of the sum. However, if we choose a randomly selected representative set of configurations to sum, one can get a good estimate of $\langle A \rangle$. Moreover, if the configurations with bigger weights are more likely to be chosen, then an equivalent answer can be reached by summing fewer terms \cite{marchand}.
+
+\subsection{Metropolis Algorithm}
+
+The Metropolis Algorithm can be used to solve such problem. It replaces the sums in Eq. \ref{ap:2} by stochastic sums such that for indefinitely long computation we have:
+
+\begin{equation}
+	\label{mc:3}
+	\frac{\sum_{\alpha}^{'} A_{\alpha}}{\sum_{\alpha}^{'}} \to 
+	\frac{\sum_{\alpha}^{'} A_{\alpha} W_{\alpha}}{\sum_{\alpha}^{'} W_{\alpha}}
+\end{equation}
+
+By defining $N_{\alpha}$ to be the number of times state $\alpha$ was summed, we get:
+
+\begin{equation}
+	\frac{\sum_{\alpha}^{'} A_{\alpha}}{\sum_{\alpha}^{'}} =
+	\frac{\sum_{\alpha}^{'} A_{\alpha} N_{\alpha}}{\sum_{\alpha}^{'} N_{\alpha}} \to 
+	\frac{\sum_{\alpha}^{'} A_{\alpha} W_{\alpha}}{\sum_{\alpha}^{'} W_{\alpha}}
+\end{equation}
+
+Two conditions must be satisfied for Eq. \ref{mc:3} to hold:
+
+\begin{enumerate}
+	\item The probability to accept a configuration $\alpha$ must be proportional to its weight $W_{\alpha}$
+	\item The stochastic generation of configuration must obey ergodicity, i.e. all possible configurations must be eventually generated.
+\end{enumerate}
+
+Metropolis et al. advanced conventional thinking at the time by introducing the idea of using a Markov process of successive states $\alpha_{i}$ where each state $\alpha_{i+1}$ is constructed from a previous state $\alpha_i$. The probability to accept or reject the new configuration is given as the function of weight ratios. To implement this idea successfully a \textit{detailed balance
+equation} has to be imposed:
+
+\begin{equation}
+	P_{eq}(\alpha_{i})W(\alpha_{i} \to \alpha_{i'}) = P_{eq}(\alpha_{i'})W(\alpha_{i'} \to \alpha_{i}) 
+\end{equation}
+
+This equation denotes that at equilibrium there is an equal probability
+for $\alpha_{i} \to \alpha_{i'}$ and $\alpha_{i'} \to \alpha_{i}$. If we now take the ratio of the configuration weights it becomes evident that both moves are only dependent on the energy change $dE = E(\alpha_{i'}) - E(\alpha_{i})$.
+
+\begin{equation}
+\label{eq:balance1}
+	\frac{W(\alpha_{i} \to \alpha_{i'})}{W(\alpha_{i'} \to \alpha_{i})} = e^{-dE/T}
+\end{equation}
+
+To specify the weight or \textit{transition probability} fo going from one state to another we introduce 
+
+\begin{equation}
+	\label{eq:weight}
+	W(\alpha_{i} \to \alpha_{i'}) = \begin{cases}
+								e^{-dE/T}, & \mbox{if } dE \leq 0\\
+								1, & \mbox{else}
+						     \end{cases}
+\end{equation}
+
+It can be shown that using the weight in Eq.\ref{eq:weight} the distribution $P(\alpha_{i})$ of states generated by the process tend to the equilibrium distribution as $M \to \infty$. Thus the construct holds and approximates the theory with an increasing degree of accuracy as we consider a larger set of points in the configuration space \cite{kotze}.
+
+\subsubsection*{Code Implementation}
+
+The programme is written in an object-oriented way in \verb+cython+ and the main steps are presented below \footnote{A full code can be found here: \href{https://github.com/artemstopnevich/Ising_Model_2D/blob/689a1759fd7a9aaacc71fcb317da944f78cce749/Metropolis/}{Metropolis Algorithm} }
+:
+
+\begin{enumerate}
+	\item Form an initial (equilibrium) configuration of spins;
+	\item Select a spin at random and flip it;
+	\item Calculate $dE$, i.e. change of the  system energy, caused by the random change of configuration;
+	\item If $dE \leq 0$ , we accept the new configuration and go to step 8;
+	\item If $dE > 0$, then calculate transition probability, $W$ using Eq. \ref{eq:weight};
+	\item Generate a random number, \verb+r+ in the interval \verb+(0,1)+;
+	\item If $r \leq W$ - accept the new configuration, otherwise keep the previous configuration;
+	\item Determine the values of the required physical observables;
+	\item Repeat steps 2 to 8 to obtain a sufficient number of configurations.
+\end{enumerate}
+
+In order to reach an equilibrium state of the system, presented in step 1, we first generate a lattice with random configuration of spins and allow it to run for certain number of steps, commonly referred to as \textit{relaxation time}. 
+
+\subsubsection*{Critical slowing-down}
+
+Due to the nature of the single-flip algorithm, its autocorrelation time
+\footnote{Time for generated configurations to become statistically independent of the past configurations.}
+doesn't allow for a quick computation of physical observables around the critical temperature. This effect is called \textit{critical slowing down}, which makes accurate studies close to the phase transitions difficult \cite{sandvik}. One way to partially compensate for the influence of this phenomena on the total runtime of the programme is to introduce parallel computing practises or use increasingly fast hardware. However, another approach is to use \textit{cluster algorithms} that do not suffer from critical slowing down.
+
+\subsection{Cluster Algorithms}
+
+In cluster algorithms, all lattice spins are linked into clusters and in the simulation, not individual spins but the whole cluster is flipped. A cluster is a set of unidirectional spins that are continuously connected. The probability of a spin belonging to a cluster depends on the temperature.
+
+When flipping, the configuration of spins is conserved within the cluster, energy changes occur only due to changes in the configuration at the perimeter of the cluster. Clustering methods allow to weaken the correlation between the states and significantly reduce the relaxation time near the critical point.
+
+After a certain number of studies, cluster algorithms have proved to be very powerful, robust and highly efficient tools for investigating critical phenomena in various systems and models. In order to reduce the effects of critical slowdown, Wolff or Svendsen-Wang cluster algorithms are commonly used. The difference between these algorithms is that in the case of the Wolff algorithm one cluster is constructed and flipped with probability equal to $1$, while in the case of the multi-cluster Swendsen-Wang algorithm the system is split into many clusters, each of which is flipped with probability $1/2$.
+
+\subsubsection{Swendsen-Wang algorithm \cite{SW}}
+
+\begin{enumerate}
+	\item Starting from a random lattice site, the whole grid is examined and the two nearest spins $i$ and $j$ are linked with probability $(p=1-e^{-2/T})$ if $s_i = s_j$ .
+	\item By creating links between the nearest neighbours (nn), the nodes form clusters.
+	\item Clusters (sets of spins) are identified on the lattice.
+	\item Each cluster is flipped with probability $1/2$.
+\end{enumerate}
+
+\begin{figure}[h!]
+  \label{fig:SwendsenWang}
+  \includegraphics[width=0.6\textwidth]{figures/SW_2.png}
+  \centering
+  \caption{The figure shows an example of the distribution of spin clusters formed as a result of binding. }
+\end{figure}
+
+As a result the configuration will change a lot during an update and would obviously follow the ergodicity principle of Monte Carlo simulations. The algorithm must also satisfy the detailed balance equation, which is proved in Appendix \ref{balance} \footnote{The code for SW can be accessed here: \href{https://github.com/artemstopnevich/Ising_Model_2D/blob/689a1759fd7a9aaacc71fcb317da944f78cce749/SwendsenWang/}{Swendsen-Wang algorithm}.}.
+
+A spin cluster can consist of one or more spins. Once clusters of spins are formed, they are labelled, and stored in the code memory. The list of all clusters is then reviewed and the spins are flipped with probability $\frac{1}{2}$.
+
+\subsubsection{Wolff algorithm \cite{Wolff}}
+
+Ulli Wolff proposed a slightly different version of the Swendsen-Wang's algorithm. In Wolff's algorithm, only one cluster is formed on the lattice, starting from an arbitrarily chosen spin, then a new value of $1$ or $-1$ is assigned to it with equal probability. Below is the algorithm \footnote{The code for Wolff can be accessed here: \href{https://github.com/artemstopnevich/Ising_Model_2D/blob/689a1759fd7a9aaacc71fcb317da944f78cce749/Wolff/}{Wolff algorithm}.}:
+
+\begin{enumerate}
+
+	\item The $i-th$ spin on the lattice is chosen at random and is then considered the beginning of cluster growth, to which the nn-spins are joined with probability $p=1-e^{-2/T}$ if $s_i = s_j$. 
+	\item After checking all adjacent nodes, the spin whose coordinates were last loaded onto the stack is selected as the centre node and the search is executed again.
+	\item The cluster growth continues until the stack becomes empty and the number of untested spins is exhausted.
+	
+	\item The created cluster is assigned new spin values $1$ or $-1$ with equal probability.
+\end{enumerate}
+
+\begin{figure}[h!]
+  \label{fig:Wolff}
+  \includegraphics[width=0.9\textwidth]{figures/W_1.png}
+  \centering
+  \caption{Example of cluster growth with the single-cluster Wolff algorithm for 2-dimensional Ising Model.}
+\end{figure}
+
+The difference between these methods is that in the case of the Wolff algorithm, only a single cluster is constructed , which is flipped with probability equal to $1$.
+
+\todo[inline]{repetitive?}

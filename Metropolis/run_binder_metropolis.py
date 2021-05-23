@@ -22,25 +22,28 @@ for i in [5,10,15]:
     
     N, nT       = i, 10
     epochs = 2000
+    relax_time = 1000
 
     Field           = np.zeros((N+2,N+2), dtype=np.int32)
     Energy          = np.zeros((nT), dtype=np.float64)
     Magnetization   = np.zeros((nT), dtype=np.float64)
     SpecificHeat    = np.zeros((nT), dtype=np.float64)
     Susceptibility  = np.zeros((nT), dtype=np.float64)
+    Binder          = np.zeros((nT), dtype=np.float64)
     Error_Ene       = np.zeros((nT), dtype=np.float64)
     Error_Mag       = np.zeros((nT), dtype=np.float64)
-    Binder          = np.zeros((nT), dtype=np.float64)
+    Error_C         = np.zeros((nT), dtype=np.float64)
+    Error_X         = np.zeros((nT), dtype=np.float64)
     
     #Temperature
-    Temperature = np.linspace(2,3, nT)
+    Temperature = np.linspace(2.2,2.3, nT)
     Beta = 1.0/Temperature   # set k_B = 1
 
-    #instantiate the class Ising model
-    Ising = ising.Ising(N, nT, epochs)
+    # model execution
+    Ising = ising.Ising(N, nT, epochs, relax_time)
     
     Ising.twoD(Field, Energy, Magnetization, SpecificHeat, Susceptibility, 
-               Beta, Binder, Error_Ene, Error_Mag)
+               Beta, Binder, Error_Ene, Error_Mag, Error_C, Error_X)
 
 
     plt.plot(Temperature, Binder, label='N=%s'%N)
